@@ -1,7 +1,7 @@
 from aws_cdk import (
     Stack,
     CfnOutput,
-    aws_ec2 as ec2, 
+    aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_cloudfront as cloudfront,
     aws_ecs_patterns as ecs_patterns
@@ -16,7 +16,7 @@ class StreamlitecsStack(Stack):
         vpc = ec2.Vpc(self, "MyVpc", max_azs=3)     # default is all AZs in region
 
         cluster = ecs.Cluster(self, "MyCluster", vpc=vpc)
-        
+
         security_group = ec2.SecurityGroup(self, "MySecurityGroup",
             vpc=vpc,
             description="Allow CloudFront traffic to ALB",
@@ -36,8 +36,8 @@ class StreamlitecsStack(Stack):
             task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
                 image=ecs.ContainerImage.from_registry("public.ecr.aws/m2l6b1f0/streamlitecs:latest")), # replace with your own image repe
             memory_limit_mib=2048,      # Default is 512
-            public_load_balancer=False)  
-        
+            public_load_balancer=False)
+
         app.load_balancer.add_security_group(security_group)
 
         distribution = cloudfront.CloudFrontWebDistribution(
@@ -58,14 +58,13 @@ class StreamlitecsStack(Stack):
                             forwarded_values=cloudfront.CfnDistribution.ForwardedValuesProperty(query_string=True,headers=['*'] ),
                         )
                     ],
-                    
-                    
+
+
                 )
             ]
         )
-        
+
         url = "https://"+distribution.distribution_domain_name
-        
+
         CfnOutput(self, id="CFurl", value=url, export_name="CFdistribution")
-        
-     
+
