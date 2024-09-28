@@ -36,7 +36,7 @@ class StreamlitecsStack(Stack):
             task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
                 image=ecs.ContainerImage.from_registry("public.ecr.aws/m2l6b1f0/streamlitecs:latest")), # replace with your own image repe
             memory_limit_mib=2048,      # Default is 512
-            public_load_balancer=False)
+            public_load_balancer=True)
 
         app.load_balancer.add_security_group(security_group)
 
